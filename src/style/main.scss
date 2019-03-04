@@ -1,0 +1,49 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+}
+
+
+#notebook {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+    grid-gap: 20px;
+
+    background-color: #f8f8f8;
+}
+
+#notebook > * {
+    background-color: white;
+}
+
+
+// 侧边栏
+.side-bar {
+    grid-column: 1 / 4;
+}
+// 主面板
+.main {
+    grid-column: 4 / 8;
+    display: flex;
+}
+.main textarea {
+    flex: auto;
+}
+
+// 预览面板
+.preview {
+    grid-column: 8 / 13;
+}
