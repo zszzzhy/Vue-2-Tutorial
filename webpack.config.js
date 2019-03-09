@@ -8,7 +8,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
     mode: "none",
 
-    entry: { main: './src/index.js' },
+    entry: { bundle: './src/index.js' },
     // 开发环境
     devtool: 'eval-source-map',
     // 生产环境
@@ -33,6 +33,9 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
+                include: [
+                    path.resolve(__dirname, "src/styles")
+                ],
                 use: [
                     "style-loader",
                     MiniCssExtractPlugin.loader,
@@ -41,6 +44,20 @@ module.exports = {
                     "sass-loader"
                 ]
             },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                include: [
+                    path.resolve(__dirname, "src/images")
+                ],
+                loader: "file-loader"
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                include: [
+                    path.resolve(__dirname, "src/fonts")
+                ],
+                loader: "file-loader"
+            }
         ]
     },
 

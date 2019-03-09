@@ -1,4 +1,4 @@
-import './style/main.scss';
+import './styles/style.scss';
 
 new Vue({
     name: 'notebook',
