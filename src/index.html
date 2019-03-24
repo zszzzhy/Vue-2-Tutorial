@@ -15,13 +15,26 @@
 		<!-- 笔记本应用 -->
 		<div id="notebook">
 			<!-- 侧边栏 -->
-			<aside class="side-bar"></aside>
-			<!-- 主面板 -->
-			<section class="main">
-				<textarea v-model="content"></textarea>
-			</section>
-			<!-- 预览面板 -->
-			<aside class="preview" v-html="notePreview"></aside>
+			<aside class="side-bar">
+				<!-- 工具栏 -->
+				<div class="toolbar">
+					<!-- 添加笔记按钮 -->
+					<button v-on:click="addNote" v-bind:title="addButtonTitle"><i class="material-icons">add</i> Add note</button>
+				</div>
+				<div class="notes">
+					<div class="note" v-for="note of notes" v-on:clik="selectNote(note)" v-bind:class="{selected: note === selectedNote}">
+						{{ note.title }}
+					</div>
+				</div>
+			</aside>
+			<template v-if="selectedNote">
+				<!-- 主面板 -->
+				<section class="main">
+					<textarea v-model="selectedNote.content"></textarea>
+				</section>
+				<!-- 预览面板 -->
+				<aside class="preview" v-html="notePreview"></aside>
+			</template>
 		</div>
 		<!-- 我的 JavaScript 文件 -->
 		<script src="<%= htmlWebpackPlugin.files.chunks.bundle.entry %>"></script>
