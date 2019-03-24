@@ -4,14 +4,15 @@
 		<meta charset="UTF-8" />
 		<title>Notebook</title>
 		<!-- 图标和样式库 -->
-		<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.bundle.css %>" />
 	</head>
 
 	<body>
 		<!-- 前置 JavaScript 库 -->
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
 		<!-- 笔记本应用 -->
 		<div id="notebook">
 			<!-- 侧边栏 -->
@@ -19,10 +20,11 @@
 				<!-- 工具栏 -->
 				<div class="toolbar">
 					<!-- 添加笔记按钮 -->
-					<button v-on:click="addNote" v-bind:title="addButtonTitle"><i class="material-icons">add</i> Add note</button>
+					<button @click="addNote" :title="'已经有 ' + notes.length + ' 条笔记'"><i class="material-icons">add</i> Add note</button>
 				</div>
 				<div class="notes">
-					<div class="note" v-for="note of notes" v-on:clik="selectNote(note)" v-bind:class="{selected: note === selectedNote}">
+					<div class="note" v-for="note of sortedNotes" :class="{ selected: note === selectedNote }" @click="selectNote(note)">
+						<i class="icon material-icons" v-if="note.favorite">star</i>
 						{{ note.title }}
 					</div>
 				</div>
@@ -30,7 +32,44 @@
 			<template v-if="selectedNote">
 				<!-- 主面板 -->
 				<section class="main">
+					<div class="toolbar">
+						<input v-model="selectedNote.title" placeholder="笔记标题">
+						<button @click="favoriteNote" title="收藏笔记">
+							<i class="material-icons">
+								{{ selectedNote.favorite ? 'star' : 'star_border' }}
+							</i>
+						</button>
+						<button @click="removeNote" title="移除笔记">
+							<i class="material-icons">delete</i>
+						</button>
+					</div>
 					<textarea v-model="selectedNote.content"></textarea>
+					<div class="toolbar status-bar">
+						<span class="date">
+							<span class="label">创建日期</span>
+							<span class="value">
+								{{ selectedNote.created | date }}
+							</span>
+						</span>
+						<span class="lines">
+							<span class="label">行数</span>
+							<span class="value">
+								{{ linesCount }}
+							</span>
+						</span>
+						<span class="words">
+							<span class="label">单词数</span>
+							<span class="value">
+								{{ wordsCount }}
+							</span>
+						</span>
+						<span class="characters">
+							<span class="label">字符数</span>
+							<span class="value">
+								{{ charactersCount }}
+							</span>
+						</span>
+					</div>
 				</section>
 				<!-- 预览面板 -->
 				<aside class="preview" v-html="notePreview"></aside>
